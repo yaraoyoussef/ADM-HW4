@@ -27,7 +27,7 @@ def prepare_user_data(top_similar_users, df):
 Recommends movies based on the ratings of the two most similar users.
 If both similar users have rated a movie, recommend this movie based on the average rating.
 If there are no commonly rated movies, recommend the top-rated movies of the most similar user.
-It returns recommendations: List of tuples containing movieId and the average predicted rating.
+It returns recommendations: List of tuples containing movie title and the average predicted rating.
 '''
 def recommend_movies(top_similar_users, df, user_id, top_k = 10):
 
