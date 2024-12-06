@@ -26,17 +26,19 @@ def find_users(user_id, buckets):
 Rank similar users based on Jaccard similarity given:
     user_id: The ID of the current user.
     similar_users: A set of user IDs that are potential matches.
-    minhash_signatures: Dictionary mapping user IDs to their MinHash signatures.
-and returns a list of the top 2 users with the highest Jaccard similarity.
+    user_movies: Dictionary mapping user IDs to their movie list.
+    We decide to use the real jaccard as it ensures more accurate results for the final selection, 
+    especially since this step directly affects the quality of recommendations.
+and returns a list of the top 2 users with the highest real Jaccard similarity.
 '''
-def rank_similar_users(user_id, similar_users, minhash_signatures):
+def rank_similar_users(user_id, similar_users, user_movies):
     # Retrieve current user's signature
-    user_sig = minhash_signatures[user_id]
+    user_mov = user_movies[user_id]
     similarities = []
 
     # Calculate Jaccard similarity between the current user and each similar user
     for user in similar_users:
-        similarity = hashing.jaccard_similarity(user_sig, minhash_signatures[user])
+        similarity = hashing.real_jaccard_similarity(user_mov, user_movies[user])
         # Append user ID and similarity score as a tuple
         similarities.append((user, similarity))
     similarities.sort(key=lambda x: x[1], reverse=True)
@@ -55,7 +57,7 @@ Args:
 Returns:
     A list of the top similar users after adjusting LSH parameters.
 '''
-def similars_not_found(user_id, buckets, minhash_signatures, lsh_parameters, adjust_params_callback):
+def similars_not_found(user_id, buckets, minhash_signatures, user_movies, lsh_parameters, adjust_params_callback):
     # Find similar users for the given user ID using find_users function
     similar_users = find_users(user_id, buckets)
 
@@ -70,7 +72,7 @@ def similars_not_found(user_id, buckets, minhash_signatures, lsh_parameters, adj
         similar_users = find_users(user_id, buckets)
 
     # Rank the similar users based on Jaccard similarity
-    top_users = rank_similar_users(user_id, similar_users, minhash_signatures)
+    top_users = rank_similar_users(user_id, similar_users, user_movies)
     return top_users
 
 ''' 
