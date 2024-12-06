@@ -29,10 +29,13 @@ If both similar users have rated a movie, recommend this movie based on the aver
 If there are no commonly rated movies, recommend the top-rated movies of the most similar user.
 It returns recommendations: List of tuples containing movieId and the average predicted rating.
 '''
-def recommend_movies(top_similar_users, df, user_id):
+def recommend_movies(top_similar_users, df, user_id, top_k = 10):
 
     # Get the dictionaries containing for each user, the movieID with the given rating 
     user1_dict, user2_dict = prepare_user_data(top_similar_users, df)
+
+    # Get the movies titles
+    movie_titles = dict(zip(df["movieId"], df["title"]))
 
     # Find common movies for both users
     common_movies = set(user1_dict.keys()).intersection(user2_dict.keys())
@@ -42,23 +45,24 @@ def recommend_movies(top_similar_users, df, user_id):
     # Remove the movies the user already rated/watched from the recommendation system
     common_movies -= user_movies
 
+    recommendations = []
+
     # if users have commonly rated movies
     if common_movies:
-        recommendations = []
         # Take every movie in common movies
         for movie in common_movies:
             # Calculate the average rating
             avg_rating = (user1_dict[movie] + user2_dict[movie]) / 2
-            recommendations.append((movie, avg_rating))
+            recommendations.append((movie_titles[movie], avg_rating))
         # Sort from highest to lowest
         recommendations.sort(key = lambda x: x[1], reverse=True)
 
     # else return the top rated movies of the most similar user
     else:
-        recommendations = list(user1_dict.items())
-        recommendations.sort(key= lambda x: x[1], reverse=True)
-    ## TODO CHANGE TO MOVIE NAME AS WELL 
-    return recommendations
+        for movie_id, rating in user1_dict.items():
+            recommendations.append((movie_titles[movie_id], rating))
+            recommendations.sort(key= lambda x: x[1], reverse=True)
+    return recommendations[:top_k]
 
 '''
 Generates a final recommendation list of movies with their predicted ratings in the following way:
