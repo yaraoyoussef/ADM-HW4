@@ -9,8 +9,8 @@
 
 #Content of the REPO:
 
-- main.ipynb: Folder containing the main script for the HW solution
-- MyFunctions: contains the code related to part #1 of the HW
+- main.ipynb: contains the main scripts for the HW solution
+- MyFunctions: Folder  containing the code related to part #1 of the HW
     - analysis_functions.py : Functions used to analyse the dataset
     - clustering.py : Functions used in point 1 to cluster users into buckets
     - hashing.py : Functions used to hash movies of users into hash values
