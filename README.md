@@ -9,5 +9,10 @@
 
 #Content of the REPO:
 
-- main.ipynb: contains the main script for the HW solution
-- analysis_functions.py: contains the code related to part #1 of the HW.
+- main.ipynb: Folder containing the main script for the HW solution
+- MyFunctions: contains the code related to part #1 of the HW
+    - analysis_functions.py :
+    - clustering.py :
+    - hashing.py :
+    - querying.py :
+    - recommending.py :
